@@ -35,16 +35,27 @@ export function authenticate (req, res) {
 }
 
 export function registration (req, res) {
-  const user = new userSchema({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
-  });
-  user.save((err) => {
+  userSchema.findOne({ name: req.body.name }, (err, user) => {
     if (err) throw err;
-    console.log('User saved successfully');
-    res.json({
-      success: true,
-    });
+
+    if (user) {
+      res.json({
+        success: false,
+        message: 'Username already used!'
+      });
+    } else {
+      const user = new userSchema({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+      });
+      user.save((err) => {
+        if (err) throw err;
+        console.log('User saved successfully');
+        res.json({
+          success: true,
+        });
+      });
+    }
   });
 }

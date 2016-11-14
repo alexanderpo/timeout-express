@@ -11,6 +11,10 @@ export const postSchema = mongoose.model('Post', new Schema({
       type: String,
       required: true,
     },
+    category: {
+      type: String,
+      required: true,
+    },
     author: {
       type: ObjectId,
       required: true,
@@ -23,9 +27,11 @@ export const postSchema = mongoose.model('Post', new Schema({
       type: Date,
       default: Date.now,
     },
+    time: {
+      type: Number,
+      required: true,
+    },
     likes: Number,
-    time: Number,
-    categories: [String],
     comments: [{
       user: {
         type: ObjectId,

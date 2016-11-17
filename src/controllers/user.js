@@ -27,6 +27,7 @@ export function authenticate (req, res) {
         res.json({
           success: true,
           name: user.name,
+          id: user._id,
           token: token,
         });
       }

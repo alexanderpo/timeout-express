@@ -13,7 +13,7 @@ export function createFirstStep (req, res) {
           title: req.body.title,
           description: req.body.description,
           category: req.body.category,
-          author: req.body.user,
+          author: req.body.userId,
           time: req.body.time,
         });
 

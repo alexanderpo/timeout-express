@@ -1,5 +1,37 @@
 import { postSchema } from '../models/post';
 
+export function getAllPosts (req, res) {
+  postSchema.find({}, (err, posts) => {
+    if (err) throw err;
+    if (posts.length != 0) {
+      res.json({
+        success: true,
+        posts: posts,
+      });
+    } else {
+      res.json({
+        success: false,
+      });
+    }
+  });
+}
+
+export function getTimeSearchResult (req, res) {
+  postSchema.find({ time: req.body.time }, (err, posts) => {
+    if (err) throw err;
+    if (posts.length != 0) {
+      res.json({
+        success: true,
+        posts: posts,
+      });
+    } else {
+      res.json({
+        success: false,
+      });
+    }
+  });
+}
+
 export function createFirstStep (req, res) {
   postSchema.findOne({ title: req.body.title }, (err, post) => {
     if (err) throw err;

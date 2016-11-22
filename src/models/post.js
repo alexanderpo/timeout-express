@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
+const UserID = Schema.ObjectId;
 
 export const postSchema = mongoose.model('Post', new Schema({
     title: {
@@ -16,7 +16,7 @@ export const postSchema = mongoose.model('Post', new Schema({
       required: true,
     },
     author: {
-      type: ObjectId,
+      type: UserID,
       required: true,
     },
     created_date: {
@@ -31,10 +31,10 @@ export const postSchema = mongoose.model('Post', new Schema({
       type: Number,
       required: true,
     },
-    likes: Number,
+    likes: [UserID],
     comments: [{
       user: {
-        type: ObjectId,
+        type: UserID,
         required: true,
       },
       comment: String,

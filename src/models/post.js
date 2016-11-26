@@ -16,7 +16,7 @@ export const postSchema = mongoose.model('Post', new Schema({
       required: true,
     },
     author: {
-      type: UserID,
+      type: String,
       required: true,
     },
     created_date: {

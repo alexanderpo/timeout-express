@@ -1,4 +1,5 @@
 import { postSchema } from '../models/post';
+import { userSchema } from '../models/user';
 
 export function getAllPosts (req, res) {
   postSchema.find({}, (err, posts) => {
@@ -16,6 +17,13 @@ export function getAllPosts (req, res) {
   });
 }
 
+function getUserNameById (id) {
+  userSchema.findById(id, 'name -_id', (err, user) => {
+    if (err) throw err;
+    console.log(user.name);
+  });
+}
+
 export function getTimeSearchResult (req, res) {
   postSchema.find({ time: req.body.time }, (err, posts) => {
     if (err) throw err;
@@ -24,6 +32,10 @@ export function getTimeSearchResult (req, res) {
         success: true,
         posts: posts,
       });
+      /* res.json({
+        success: true,
+        posts: posts,
+      }); */
     } else {
       res.json({
         success: false,
@@ -45,7 +57,7 @@ export function createFirstStep (req, res) {
           title: req.body.title,
           description: req.body.description,
           category: req.body.category,
-          author: req.body.userId,
+          author: req.body.user,
           time: req.body.time,
         });
 

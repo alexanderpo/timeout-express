@@ -10,7 +10,7 @@ export const userSchema = mongoose.model('User', new Schema({
       type: String,
       required: true,
     },
-    password: {
+    hash: {
       type: String,
       required: true,
     },

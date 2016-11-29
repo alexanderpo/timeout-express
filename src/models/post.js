@@ -11,10 +11,6 @@ export const postSchema = mongoose.model('Post', new Schema({
       type: String,
       required: true,
     },
-    category: {
-      type: String,
-      required: true,
-    },
     author: {
       type: String,
       required: true,
@@ -40,5 +36,4 @@ export const postSchema = mongoose.model('Post', new Schema({
       comment: String,
       created_date: Date,
     }],
-    body: String, // TODO: implement rich text data support
 }));

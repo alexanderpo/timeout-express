@@ -16,6 +16,22 @@ export function getAllPosts (req, res) {
   });
 }
 
+export function getPostsByAuthor (req, res) {
+  postSchema.find({ author: req.body.username }, (err, posts) => {
+    if (err) throw err;
+    if (posts.length != 0) {
+      res.json({
+        success: true,
+        posts: posts,
+      });
+    } else {
+      res.json({
+        success: false,
+      });
+    }
+  });
+}
+
 export function getSearchResult (req, res) {
   postSchema.find({ time: req.body.time }, (err, posts) => {
     if (err) throw err;

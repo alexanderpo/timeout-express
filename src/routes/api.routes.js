@@ -5,6 +5,7 @@ import {
   createPost,
   getAllPosts,
   getSearchResult,
+  getPostsByAuthor,
 } from '../controllers/post';
 
 const apiRouter = Router();
@@ -16,6 +17,8 @@ apiRouter.post('/registration', registration );
 apiRouter.use(routesTokenProtect);
 
 apiRouter.get('/posts', getAllPosts);
+
+apiRouter.post('/posts-by-author', getPostsByAuthor);
 
 apiRouter.post('/posts/search', getSearchResult);
 

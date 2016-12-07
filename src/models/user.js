@@ -14,8 +14,14 @@ export const userSchema = mongoose.model('User', new Schema({
       type: String,
       required: true,
     },
-    meta: [{
-      about: String,
-      raiting: Number,
-    }],
+    image: {
+      img_url: {
+        type: String,
+        default: 'public/users/images/default.png',
+      },
+      img_type: {
+        type: String,
+        default: 'image/png',
+      }
+    },
 }));

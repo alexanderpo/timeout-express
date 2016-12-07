@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { routesTokenProtect } from '../middlewares/routesTokenProtect';
-import { authenticate, registration } from '../controllers/user';
+import { authenticate, registration, updateInformation } from '../controllers/user';
 import {
   createPost,
   getAllPosts,
@@ -15,6 +15,8 @@ apiRouter.post('/authenticate', authenticate );
 apiRouter.post('/registration', registration );
 
 apiRouter.use(routesTokenProtect);
+
+apiRouter.put('/profile/:id', updateInformation);
 
 apiRouter.get('/posts', getAllPosts);
 

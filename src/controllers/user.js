@@ -33,6 +33,7 @@ export function authenticate (req, res) {
             name: user.name,
             email: user.email,
             image: 'data:' + img_type + ';base64,' + image,
+            img_type: img_type,
             token: token,
           });
         } else {
@@ -76,24 +77,27 @@ export function registration (req, res) {
 }
 
 export function updateInformation (req, res) {
-  const { name, email, dataImage } = req.body;
+  const { name, email, dataImage, imageType } = req.body;
   const id = req.params.id;
-  const imageType = '.png';
-  const saveImagePath = 'public/users/images/' + name  + imageType;
+  const imageFormat = imageType.split('/')[1];
+  const imagePath = 'public/users/images/' + name  + '.' + imageFormat;
 
   const newData = {
-    avatar: saveImagePath,
+    image: {
+      img_url: imagePath,
+      img_type: imageType,
+    },
     name: name,
     email: email,
   };
-
+// TODO: fix duplicate users image files after changing name
   userSchema.findOneAndUpdate({ _id: id }, newData, (err, user) => {
     if (err) throw err;
     if (user) {
       if (dataImage !== null) {
         const data = dataImage.replace(/^data:image\/\w+;base64,/, '');
 
-        fs.writeFile(saveImagePath, data, { encoding: 'base64' }, (err) => {
+        fs.writeFile(imagePath, data, { encoding: 'base64' }, (err) => {
           if (err) throw err;
           console.log('Image saved successfully!');
         });

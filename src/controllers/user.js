@@ -106,8 +106,14 @@ export function updateInformation (req, res) {
     res.json({
       success: true,
       message: 'Profile updated',
-      name: name,
-      email: email,
+      data: {
+        name: newData.name,
+        email: newData.email,
+        image: {
+          data: dataImage,
+          type: imageType,
+        },
+      },
     });
   });
 }

@@ -12,8 +12,14 @@ export const postSchema = mongoose.model('Post', new Schema({
       required: true,
     },
     author: {
-      type: String,
-      required: true,
+      link: {
+        type: UserID,
+        required: true,
+      },
+      name: {
+        type: String,
+        required: true,
+      },
     },
     created_date: {
       type: Date,
@@ -31,7 +37,6 @@ export const postSchema = mongoose.model('Post', new Schema({
     comments: {
       user: {
         type: UserID,
-        required: true,
       },
       comment: String,
       created_date: Date,

@@ -17,8 +17,9 @@ export function getAllPosts (req, res) {
 }
 
 export function getPostsByAuthor (req, res) {
-  postSchema.find({ author: req.body.username }, (err, posts) => {
+  postSchema.find({ 'author.link' : req.params.id }, (err, posts) => {
     if (err) throw err;
+    console.log(posts);
     if (posts.length != 0) {
       res.json({
         success: true,
@@ -60,7 +61,10 @@ export function createPost (req, res) {
         const post = new postSchema({
           title: req.body.title,
           description: req.body.description,
-          author: req.body.user,
+          author: {
+            link: req.body.userId,
+            name: req.body.username,
+          },
           time: req.body.time,
         });
 

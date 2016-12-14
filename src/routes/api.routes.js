@@ -20,7 +20,7 @@ apiRouter.put('/profile/:id', updateInformation);
 
 apiRouter.get('/posts', getAllPosts);
 
-apiRouter.post('/posts-by-author', getPostsByAuthor);
+apiRouter.get('/posts-by-author/:id', getPostsByAuthor);
 
 apiRouter.post('/posts/search', getSearchResult);
 

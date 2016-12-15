@@ -19,7 +19,6 @@ export function getAllPosts (req, res) {
 export function getPostsByAuthor (req, res) {
   postSchema.find({ 'author.link' : req.params.id }, (err, posts) => {
     if (err) throw err;
-    console.log(posts);
     if (posts.length != 0) {
       res.json({
         success: true,

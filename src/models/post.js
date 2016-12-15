@@ -20,6 +20,9 @@ export const postSchema = mongoose.model('Post', new Schema({
         type: String,
         required: true,
       },
+      image: {
+        type: String,
+      },
     },
     created_date: {
       type: Date,

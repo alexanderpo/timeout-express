@@ -77,27 +77,30 @@ export function registration (req, res) {
 }
 
 export function updateInformation (req, res) {
-  const { name, email, dataImage, imageType } = req.body;
+  const { oldName, name, email, dataImage, oldImageType, imageType } = req.body;
   const id = req.params.id;
   const imageFormat = imageType.split('/')[1];
-  const imagePath = 'public/users/images/' + name  + '.' + imageFormat;
+  const oldImageFormat = oldImageType.split('/')[1];
+  const oldImagePath = 'public/users/images/' + oldName  + '.' + oldImageFormat;
+  const newImagePath = 'public/users/images/' + name  + '.' + imageFormat;
 
   const newData = {
     image: {
-      img_url: imagePath,
+      img_url: newImagePath,
       img_type: imageType,
     },
     name: name,
     email: email,
   };
-// TODO: fix duplicate users image files after changing name
+
   userSchema.findOneAndUpdate({ _id: id }, newData, (err, user) => {
     if (err) throw err;
     if (user) {
       if (dataImage !== null) {
+        fs.unlinkSync(oldImagePath);
         const data = dataImage.replace(/^data:image\/\w+;base64,/, '');
 
-        fs.writeFile(imagePath, data, { encoding: 'base64' }, (err) => {
+        fs.writeFile(newImagePath, data, { encoding: 'base64' }, (err) => {
           if (err) throw err;
           console.log('Image saved successfully!');
         });

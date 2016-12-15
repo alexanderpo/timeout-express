@@ -54,7 +54,7 @@ export function registration (req, res) {
     if (user) {
       res.json({
         success: false,
-        message: 'Username already used!'
+        message: 'Username already used!',
       });
     } else {
       const hash = bcrypt.hashSync(req.body.password, 10);
@@ -83,40 +83,51 @@ export function updateInformation (req, res) {
   const oldImageFormat = oldImageType.split('/')[1];
   const oldImagePath = 'public/users/images/' + oldName  + '.' + oldImageFormat;
   const newImagePath = 'public/users/images/' + name  + '.' + imageFormat;
+  // const defaultImagePath = 'public/users/images/default.png';
 
-  const newData = {
-    image: {
-      img_url: newImagePath,
-      img_type: imageType,
-    },
-    name: name,
-    email: email,
-  };
-
-  userSchema.findOneAndUpdate({ _id: id }, newData, (err, user) => {
+  userSchema.findOne({ name: name }, (err, user) => {
     if (err) throw err;
-    if (user) {
-      if (dataImage !== null) {
-        fs.unlinkSync(oldImagePath);
-        const data = dataImage.replace(/^data:image\/\w+;base64,/, '');
 
-        fs.writeFile(newImagePath, data, { encoding: 'base64' }, (err) => {
-          if (err) throw err;
-          console.log('Image saved successfully!');
-        });
-      }
-    }
-    res.json({
-      success: true,
-      message: 'Profile updated',
-      data: {
-        name: newData.name,
-        email: newData.email,
+    if (user && user.id !== id) {
+      res.json({
+        success: false,
+        message: 'Username already used!',
+      });
+    } else {
+      const newData = {
         image: {
-          data: dataImage,
-          type: imageType,
+          img_url: newImagePath,
+          img_type: imageType,
         },
-      },
-    });
+        name: name,
+        email: email,
+      };
+      userSchema.findOneAndUpdate({ _id: id }, newData, (err, updatedUser) => {
+        if (err) throw err;
+        if (updatedUser && dataImage !== null) {
+          fs.unlink(oldImagePath, (err) => {
+            if (err) { console.log(err); }
+          });
+          const data = dataImage.replace(/^data:image\/\w+;base64,/, '');
+
+          fs.writeFile(newImagePath, data, { encoding: 'base64' }, (err) => {
+            if (err) throw err;
+            console.log('Image saved successfully!');
+          });
+        }
+        res.json({
+          success: true,
+          message: 'Profile updated',
+          data: {
+            name: newData.name,
+            email: newData.email,
+            image: {
+              data: dataImage,
+              type: imageType,
+            },
+          },
+        });
+      });
+    }
   });
 }

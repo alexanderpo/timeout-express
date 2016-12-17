@@ -1,32 +1,57 @@
 import { postSchema } from '../models/post';
+import { userSchema } from '../models/user';
 
 export function getAllPosts (req, res) {
   postSchema.find({}, (err, posts) => {
     if (err) throw err;
-    if (posts.length != 0) {
-      res.json({
-        success: true,
-        posts: posts,
-      });
-    } else {
+    if (posts.length === 0) {
       res.json({
         success: false,
+      });
+    } else {
+      const usersIds = posts.map(post => post.author);
+
+      userSchema.find({ _id: { $in: usersIds } }, (error, users) => {
+        if (error) { console.log(error); }
+        const updatedPosts = posts.map((post) => ({
+          // TODO: создать свой кастомный ответ клиенту с юзеров в теле поста
+        }));
       });
     }
   });
 }
 
 export function getPostsByAuthor (req, res) {
-  postSchema.find({ 'author.link' : req.params.id }, (err, posts) => {
+  const userID = req.params.id;
+  postSchema.find({ author : userID }, (err, posts) => {
     if (err) throw err;
-    if (posts.length != 0) {
-      res.json({
-        success: true,
-        posts: posts,
-      });
-    } else {
+    if (posts.length === 0) {
       res.json({
         success: false,
+      });
+    } else {
+      userSchema.findOne({ _id: userID }, (error, user) => {
+        const updatedPosts = posts.map((post) => ({
+          id: post._id,
+          title: post.title,
+          description: post.description,
+          author: {
+            id: user._id,
+            name: user.name,
+            image: {
+              img_url: user.image.img_url,
+              img_type: user.image.img_type,
+            },
+          },
+          time: post.time,
+          likes: post.likes,
+          created_date: post.created_date,
+          updated_date: post.updated_date,
+        }));
+        res.json({
+          success: true,
+          posts: updatedPosts,
+        });
       });
     }
   });
@@ -60,10 +85,7 @@ export function createPost (req, res) {
         const post = new postSchema({
           title: req.body.title,
           description: req.body.description,
-          author: {
-            link: req.body.userId,
-            name: req.body.username,
-          },
+          author: req.body.userId,
           time: req.body.time,
         });
 

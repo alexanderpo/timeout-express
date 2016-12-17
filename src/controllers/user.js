@@ -83,7 +83,6 @@ export function updateInformation (req, res) {
   const oldImageFormat = oldImageType.split('/')[1];
   const oldImagePath = 'public/users/images/' + oldName  + '.' + oldImageFormat;
   const newImagePath = 'public/users/images/' + name  + '.' + imageFormat;
-  // const defaultImagePath = 'public/users/images/default.png';
 
   userSchema.findOne({ name: name }, (err, user) => {
     if (err) throw err;
@@ -105,10 +104,11 @@ export function updateInformation (req, res) {
       userSchema.findOneAndUpdate({ _id: id }, newData, (err, updatedUser) => {
         if (err) throw err;
         if (updatedUser && dataImage !== null) {
+          const data = dataImage.replace(/^data:image\/\w+;base64,/, '');
+
           fs.unlink(oldImagePath, (err) => {
             if (err) { console.log(err); }
           });
-          const data = dataImage.replace(/^data:image\/\w+;base64,/, '');
 
           fs.writeFile(newImagePath, data, { encoding: 'base64' }, (err) => {
             if (err) throw err;

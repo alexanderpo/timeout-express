@@ -1,5 +1,7 @@
 import { postSchema } from '../models/post';
 import { userSchema } from '../models/user';
+import fs from 'fs';
+import _ from 'lodash';
 
 export function getAllPosts (req, res) {
   postSchema.find({}, (err, posts) => {
@@ -13,9 +15,45 @@ export function getAllPosts (req, res) {
 
       userSchema.find({ _id: { $in: usersIds } }, (error, users) => {
         if (error) { console.log(error); }
-        const updatedPosts = posts.map((post) => ({
-          // TODO: создать свой кастомный ответ клиенту с юзеров в теле поста
-        }));
+
+        let updatedPosts = [];
+
+        for (var i = 0; i < posts.length; i++) {
+          const currentPost = posts[i];
+
+          for (var j = 0; j < users.length; j++) {
+            const currentUser = users[j];
+
+            if (_.isEqual(currentPost.author, currentUser._id)) {
+              const img_url = fs.readFileSync(currentUser.image.img_url);
+              const img_type = currentUser.image.img_type;
+              const image = new Buffer(img_url).toString('base64');
+
+              const comparedPost = {
+                id: currentPost._id,
+                title: currentPost.title,
+                description: currentPost.description,
+                author: {
+                  id: currentUser._id,
+                  name: currentUser.name,
+                  image: {
+                    data: 'data:' + img_type + ';base64,' + image,
+                    type: img_type,
+                  },
+                },
+                time: currentPost.time,
+                likes: currentPost.likes,
+                created_date: currentPost.created_date,
+                updated_date: currentPost.updated_date,
+              };
+              updatedPosts.push(comparedPost);
+            }
+          }
+        }
+        res.json({
+          success: true,
+          posts: updatedPosts,
+        });
       });
     }
   });
@@ -31,6 +69,10 @@ export function getPostsByAuthor (req, res) {
       });
     } else {
       userSchema.findOne({ _id: userID }, (error, user) => {
+        const img_url = fs.readFileSync(user.image.img_url);
+        const img_type = user.image.img_type;
+        const image = new Buffer(img_url).toString('base64');
+
         const updatedPosts = posts.map((post) => ({
           id: post._id,
           title: post.title,
@@ -39,8 +81,8 @@ export function getPostsByAuthor (req, res) {
             id: user._id,
             name: user.name,
             image: {
-              img_url: user.image.img_url,
-              img_type: user.image.img_type,
+              data: 'data:' + img_type + ';base64,' + image,
+              type: img_type,
             },
           },
           time: post.time,

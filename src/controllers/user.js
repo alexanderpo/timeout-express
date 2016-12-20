@@ -111,7 +111,7 @@ export function updateInformation (req, res) {
           });
 
           fs.writeFile(newImagePath, data, { encoding: 'base64' }, (err) => {
-            if (err) throw err;
+            if (err) { console.log(err); }
             console.log('Image saved successfully!');
           });
         }

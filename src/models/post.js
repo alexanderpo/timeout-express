@@ -28,11 +28,4 @@ export const postSchema = mongoose.model('Post', new Schema({
       required: true,
     },
     likes: [UserID],
-    comments: {
-      user: {
-        type: UserID,
-      },
-      comment: String,
-      created_date: Date,
-    },
 }));

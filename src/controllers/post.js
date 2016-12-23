@@ -154,19 +154,6 @@ export function getSearchResult (req, res) {
       });
     }
   });
-  /* postSchema.find({ time: req.body.time }, (err, posts) => {
-    if (err) throw err;
-    if (posts.length != 0) {
-      res.json({
-        success: true,
-        posts: posts,
-      });
-    } else {
-      res.json({
-        success: false,
-      });
-    }
-  }); */
 }
 
 export function createPost (req, res) {
@@ -193,6 +180,33 @@ export function createPost (req, res) {
             message: 'Your post created!',
           });
         });
+    }
+  });
+}
+
+export function likePost (req, res) {
+  const { userId, postId } = req.body;
+
+  postSchema.findOne({ _id: postId }, (err, post) => {
+    if (err) { console.log(err); }
+    const usersWhoLike = [];
+
+    for (let i = 0; i < post.likes.length; i++) {
+      usersWhoLike.push(_.toString(post.likes[i]));
+    }
+
+    if (_.includes(usersWhoLike, userId)) {
+      post.likes.remove(userId);
+      post.save();
+      res.json({
+        isLiked: false,
+      });
+    } else {
+      post.likes.push(userId);
+      post.save();
+      res.json({
+        isLiked: true,
+      });
     }
   });
 }

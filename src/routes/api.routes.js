@@ -6,6 +6,7 @@ import {
   getAllPosts,
   getSearchResult,
   getPostsByAuthor,
+  likePost,
 } from '../controllers/post';
 
 const apiRouter = Router();
@@ -25,5 +26,7 @@ apiRouter.get('/posts-by-author/:id', getPostsByAuthor);
 apiRouter.post('/posts/search', getSearchResult);
 
 apiRouter.post('/post/create', createPost);
+
+apiRouter.post('/posts/:id/like', likePost);
 
 export default apiRouter;

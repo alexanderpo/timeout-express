@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import { routesTokenProtect } from '../middlewares/routesTokenProtect';
-import { authenticate, registration } from '../controllers/user';
+import { authenticate, registration, updateInformation } from '../controllers/user';
 import {
-  createFirstStep,
-  createSecondStep,
+  createPost,
   getAllPosts,
-  getTimeSearchResult,
+  getSearchResult,
+  getPostsByAuthor,
+  likePost,
 } from '../controllers/post';
 
 const apiRouter = Router();
@@ -16,16 +17,16 @@ apiRouter.post('/registration', registration );
 
 apiRouter.use(routesTokenProtect);
 
+apiRouter.put('/profile/:id', updateInformation);
+
 apiRouter.get('/posts', getAllPosts);
 
-apiRouter.post('/posts/search', getTimeSearchResult);
+apiRouter.get('/posts-by-author/:id', getPostsByAuthor);
 
-apiRouter.post('/post/create/first-step', createFirstStep);
+apiRouter.post('/posts/search', getSearchResult);
 
-apiRouter.post('/post/create/second-step', createSecondStep);
+apiRouter.post('/post/create', createPost);
 
-apiRouter.get('/users', (req, res) => {
-  res.send('this is private section');
-});
+apiRouter.post('/posts/:id/like', likePost);
 
 export default apiRouter;

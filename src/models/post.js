@@ -11,12 +11,8 @@ export const postSchema = mongoose.model('Post', new Schema({
       type: String,
       required: true,
     },
-    category: {
-      type: String,
-      required: true,
-    },
     author: {
-      type: String,
+      type: UserID,
       required: true,
     },
     created_date: {
@@ -32,13 +28,4 @@ export const postSchema = mongoose.model('Post', new Schema({
       required: true,
     },
     likes: [UserID],
-    comments: [{
-      user: {
-        type: UserID,
-        required: true,
-      },
-      comment: String,
-      created_date: Date,
-    }],
-    body: String, // TODO: implement rich text data support
 }));

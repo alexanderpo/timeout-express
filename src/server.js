@@ -9,7 +9,9 @@ import { config } from './config';
 const app = express();
 const port = process.env.PORT || 3000;
 
-mongoose.connect(config.database);
+mongoose.connect(config.database, (err) => {
+  if (err) throw err;
+});
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));

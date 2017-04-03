@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000;
 mongoose.connect(config.database, (err) => {
   if (err) throw err;
 });
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(morgan('dev'));

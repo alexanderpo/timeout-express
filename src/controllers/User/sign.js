@@ -15,11 +15,10 @@ export function signin (req, res) {
       if (err) {
         res.status(500).json({
           error: err,
-          message: 'Проблемы с подключением',
         });
       } else if (!user) {
         res.json({
-          message: 'Данного пользователя не существует',
+          error: 'Данного пользователя не существует',
         });
       } else if (user) {
         bcrypt.compare(password, user.hash, (err, isCompare) => {
@@ -35,7 +34,7 @@ export function signin (req, res) {
             });
           } else {
             res.json({
-              message: 'Вы ввели неправельный пароль',
+              error: 'Вы ввели неправельный пароль',
             });
           }
         });
@@ -58,11 +57,10 @@ export function signup (req, res) {
       if (err) {
         res.status(500).json({
           error: err,
-          message: 'Проблемы с подключением',
         });
       } else if (user) {
         res.json({
-          message: 'Такой пользователь уже существует',
+          error: 'Такой пользователь уже существует',
         });
       } else if (!user) {
         const hash = bcrypt.hashSync(password, 10);
@@ -78,14 +76,10 @@ export function signup (req, res) {
         user.save((error) => {
           if (error) {
             res.json({
-              error: err,
-              message: 'Проблемы при сохранении пользователя',
+              error: error,
             });
           }
-
-          res.json({
-            message: 'Пользователь успешно создан',
-          });
+          res.status(200);
         });
       }
     });

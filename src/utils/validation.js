@@ -29,6 +29,8 @@ export function signUpValidate (values) {
     error = 'Введите email адрес';
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
     error = 'Неправильный email адрес';
+  } else if (values.password === undefined) {
+    error = 'Введите пароль';
   } else if (values.password.length === 0) {
     error = 'Введите пароль';
   } else if (values.password.length < 6) {

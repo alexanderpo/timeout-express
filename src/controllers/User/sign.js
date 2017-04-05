@@ -60,7 +60,7 @@ export function signup (req, res) {
         });
       } else if (user) {
         res.json({
-          error: 'Такой пользователь уже существует',
+          error: 'Имя пользователя уже занято',
         });
       } else if (!user) {
         const hash = bcrypt.hashSync(password, 10);
@@ -79,7 +79,7 @@ export function signup (req, res) {
               error: error,
             });
           }
-          res.status(200);
+          res.status(200).json({});
         });
       }
     });

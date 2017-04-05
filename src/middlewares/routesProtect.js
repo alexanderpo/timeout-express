@@ -17,7 +17,7 @@ export function routesProtect (req, res, next) {
       });
     } else {
       res.status(403).json({
-        error: 'Токен не найден'
+        error: 'Токен не найден',
       });
     }
 }

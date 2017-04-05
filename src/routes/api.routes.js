@@ -1,15 +1,17 @@
 import { Router } from 'express';
 import { signup, signin } from '../controllers/User/sign';
+import { routesProtect } from '../middlewares/routesProtect';
 
 const apiRouter = Router();
 
-apiRouter.get('/', (req, res) => {
-  // TODO: implement manual on this api
-  res.send('hello its  a root route');
-});
+apiRouter.post('/signin', signin);
 
 apiRouter.post('/signup', signup);
 
-apiRouter.post('/signin', signin);
+apiRouter.use(routesProtect);
+
+apiRouter.get('/', (req, res) => {
+  res.send('hello its  a private route');
+});
 
 export default apiRouter;

@@ -5,7 +5,7 @@ import { signInValidate, signUpValidate } from '../../utils/validation';
 import { config } from '../../config';
 import { UserModel } from '../../models/user';
 
-export function signin (req, res) {
+export const signin = (req, res) => {
   const { name, password } = req.body;
   const values = { name, password };
   const validateError = signInValidate(values);
@@ -29,6 +29,7 @@ export function signin (req, res) {
               name: user.name,
               email: user.email,
               hash: user.hash,
+              created_at: user.created_at,
               liked_posts: user.liked_posts,
               token: token,
             });
@@ -45,9 +46,9 @@ export function signin (req, res) {
       error: validateError,
     });
   }
-}
+};
 
-export function signup (req, res) {
+export const signup = (req, res) => {
   const { name, email, password } = req.body;
   const values = { name, email, password };
   const validateError = signUpValidate(values);
@@ -88,4 +89,4 @@ export function signup (req, res) {
       error: validateError,
     });
   }
-}
+};

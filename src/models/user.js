@@ -8,5 +8,5 @@ export const UserModel = mongoose.model('User', new Schema({
   hash: { type: String, required: true },
   created_at: { type: Date, default: Date.now() },
   liked_posts: [ObjectId],
-  image: { data: Buffer, contentType: String },
+  image: { path: { type: String }, contentType: { type: String } },
 }));

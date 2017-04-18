@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import fs from 'fs';
 import _ from 'lodash';
 import { signInValidate, signUpValidate } from '../../utils/validation';
+import { readFile } from '../../utils/fileParser';
 import { config } from '../../config';
 import { UserModel } from '../../models/user';
 
@@ -24,21 +24,9 @@ export const signin = (req, res) => {
       } else if (user) {
         bcrypt.compare(password, user.hash, (err, isCompare) => {
           if (isCompare) {
-            const imageFile = (file) => {
-              try {
-                const dataFile = fs.readFileSync(file);
-                return dataFile;
-              } catch (err) {
-                if (err.code === 'ENOENT') {
-                  console.log('user without avatar is signing......');
-                  return '';
-                } else {
-                  throw err;
-                }
-              }
-            };
-            const imageData = new Buffer(imageFile(user.image.path)).toString('base64');
-            const image = user.image.contentType + imageData; // 'data:' + img_type + ';base64,' + image
+            const imageData = new Buffer(readFile(user.image.path)).toString('base64');
+            const contentType = !imageData ? '' : user.image.contentType;
+            const image = contentType + imageData;
 
             const token = jwt.sign(user, config.secret);
             res.json({

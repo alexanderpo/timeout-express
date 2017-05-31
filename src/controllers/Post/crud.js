@@ -44,7 +44,7 @@ export const getPosts = (req, res) => {
       });
     } else if (posts.length === 0) {
       res.json({
-        error: 'Пока ещё записей не создано',
+        error: 'Записи ещё не созданы',
       });
     } else {
       const usersIds = posts.map(post => post.author);
@@ -140,6 +140,26 @@ export const getAuthorPost = (req, res) => {
           posts: collectedPosts,
         });
       });
+    }
+  });
+};
+
+export const removePost = (req, res) => {
+  const id = req.params.id;
+
+  PostModel.findByIdAndRemove({ _id: id }, (err, post) => {
+    if (err) {
+      res.status(500).json({
+        error: err,
+      });
+    }
+    if (post === null || post === undefined) {
+      console.log('Post with id ' + id + ' doesn\'t exist');
+      res.json({
+        error: 'Post with id ' + id + ' doesn\'t exist',
+      });
+    } else {
+      res.status(200).json({});
     }
   });
 };

@@ -9,5 +9,6 @@ export const PostModel = mongoose.model('Post', new Schema({
   description: { type: String, required: true },
   author: { type: ObjectId, required: true },
   created_at: { type: Date, default: Date.now(), required: true },
+  updated_at: { type: Date, default: Date.now() },
   likes: [ObjectId],
 }));

@@ -82,11 +82,60 @@ export const getPosts = (req, res) => {
                 likes: currentPost.likes,
                 categories: currentPost.categories,
                 created_at: currentPost.created_at,
+                updated_at: currentPost.updated_at,
               };
               collectedPosts.push(comparedPost);
             }
           }
         }
+        res.json({
+          posts: collectedPosts,
+        });
+      });
+    }
+  });
+};
+
+export const getAuthorPost = (req, res) => {
+  const authorId = req.params.id;
+
+  PostModel.find({ author: authorId }, (err, posts) => {
+    if (err) {
+      res.status(500).json({
+        error: err,
+      });
+    } else if (posts.length === 0) {
+        res.json({
+          error: 'Вы ещё не создавали записи',
+        });
+    } else {
+      UserModel.findOne({ _id: authorId }, (err, author) => {
+        const imageData = new Buffer(readFile(author.image.path)).toString('base64');
+        const contentType = !imageData ? '' : author.image.contentType;
+        const image = contentType + imageData;
+
+        if (err) {
+          res.status(500).json({
+            error: err,
+          });
+        }
+
+        const collectedPosts = posts.map((post) => ({
+          id: post._id,
+          title: post.title,
+          description: post.description,
+          author: {
+            id: author._id,
+            name: author.name,
+            email: author.email,
+            image: image,
+          },
+          likes: post.likes,
+          categories: post.categories,
+          created_at: post.created_at,
+          updated_at: post.updated_at,
+        }));
+
         res.json({
           posts: collectedPosts,
         });

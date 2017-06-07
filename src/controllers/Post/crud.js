@@ -163,3 +163,23 @@ export const removePost = (req, res) => {
     }
   });
 };
+
+export const editPost = (req, res) => {
+  const { title, categories, description } = req.body;
+  const id = req.params.id;
+
+  const data = {
+    title: title,
+    categories: categories,
+    description: description,
+  };
+
+  PostModel.findOneAndUpdate({ _id: id }, data, { new: true }, (err, updatedPost) => {
+    if (err) {
+      res.status(500).json({
+        error: err,
+      });
+    }
+    res.json({ updatedPost });
+  });
+};

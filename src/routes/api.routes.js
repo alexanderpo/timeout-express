@@ -2,7 +2,13 @@ import { Router } from 'express';
 import { signup, signin } from '../controllers/User/sign';
 import { updateUser } from '../controllers/User/update';
 import { routesProtect } from '../middlewares/routesProtect';
-import { createPost, getPosts, getAuthorPost, removePost } from '../controllers/Post/crud';
+import {
+  createPost,
+  getPosts,
+  getAuthorPost,
+  removePost,
+  editPost,
+} from '../controllers/Post/crud';
 
 const apiRouter = Router();
 
@@ -21,6 +27,8 @@ apiRouter.get('/users/:id/posts', getAuthorPost);
 apiRouter.post('/posts/create', createPost);
 
 apiRouter.delete('/posts/remove/:id', removePost);
+
+apiRouter.put('/posts/:id/edit', editPost);
 
 apiRouter.get('/', (req, res) => {
   res.send('hello its  a private route');

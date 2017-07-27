@@ -2,15 +2,15 @@ export const signInValidate = (values) => {
   let error = '';
 
   if (values.name.length === 0) {
-    error = 'Введите имя пользователя';
+    error = 'Enter username';
   } else if (values.name.length < 3) {
-    error = 'Имя пользователя должно содержать не менее 3 символов';
+    error = 'Username must contain at least 3 characters';
   } else if (!/^[A-Za-z0-9-_.]+$/.test(values.name)) {
-    error = 'Имя пользователя может содержать только символы A-Z a-z _ - . 1-9';
+    error = 'Username can only contain A-Z characters a-z _ -. 1-9';
   } else if (values.password.length === 0) {
-    error = 'Введите пароль';
+    error = 'Enter password';
   } else if (values.password.length < 6) {
-    error = 'Пароль должен содержать не менее 6 символов';
+    error = 'Password must contain at least 6 characters';
   }
 
   return error;
@@ -20,21 +20,21 @@ export const signUpValidate = (values) => {
   let error = '';
 
   if (values.name.length === 0) {
-    error = 'Введите имя пользователя';
+    error = 'Enter username';
   } else if (values.name.length < 3) {
-    error = 'Имя пользователя должно содержать не менее 3 символов';
+    error = 'Username must contain at least 3 characters';
   } else if (!/^[A-Za-z0-9-_.]+$/.test(values.name)) {
-    error = 'Имя пользователя может содержать только символы A-Z a-z _ - . 1-9';
+    error = 'Username can only contain A-Z characters a-z _ -. 1-9';
   } else if (values.email.length === 0) {
-    error = 'Введите email адрес';
+    error = 'Enter email address';
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    error = 'Неправильный email адрес';
+    error = 'Wrong email address';
   } else if (values.password === undefined) {
-    error = 'Введите пароль';
+    error = 'Enter password';
   } else if (values.password.length === 0) {
-    error = 'Введите пароль';
+    error = 'Enter password';
   } else if (values.password.length < 6) {
-    error = 'Пароль должен содержать не менее 6 символов';
+    error = 'Password must contain at least 6 characters';
   }
 
   return error;
@@ -44,21 +44,21 @@ export const updateUserValidate = (values) => {
   let error = '';
 
   if (values.name.length === 0) {
-    error = 'Введите имя пользователя';
+    error = 'Enter username';
   } else if (values.name.length < 3) {
-    error = 'Имя пользователя должно содержать не менее 3 символов';
+    error = 'Username must contain at least 3 characters';
   } else if (!/^[A-Za-z0-9-_.]+$/.test(values.name)) {
-    error = 'Имя пользователя может содержать только символы A-Z a-z _ - . 1-9';
+    error = 'Username can only contain A-Z characters a-z _ -. 1-9';
   } else if (values.email.length === 0) {
-    error = 'Введите email адрес';
+    error = 'Enter email address';
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    error = 'Неправильный email адрес';
+    error = 'Wrong email address';
   } else if (values.isChange === true && values.password === undefined) {
-    error = 'Введите пароль';
+    error = 'Enter password';
   } else if (values.isChange === true && values.password.length === 0 && values.password === undefined) { // eslint-disable-line
-    error = 'Введите пароль';
+    error = 'Enter password';
   } else if (values.isChange === true && values.password.length < 6) {
-    error = 'Пароль должен содержать не менее 6 символов';
+    error = 'Password must contain at least 6 characters';
   }
 
   return error;

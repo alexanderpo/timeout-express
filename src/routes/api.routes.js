@@ -8,6 +8,7 @@ import {
   getAuthorPost,
   removePost,
   editPost,
+  getLatestsPosts,
 } from '../controllers/Post/crud';
 
 const apiRouter = Router();
@@ -21,6 +22,8 @@ apiRouter.use(routesProtect);
 apiRouter.put('/profile/:id', updateUser);
 
 apiRouter.get('/posts', getPosts);
+
+apiRouter.get('/posts/latest', getLatestsPosts);
 
 apiRouter.get('/users/:id/posts', getAuthorPost);
 

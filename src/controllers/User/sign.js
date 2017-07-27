@@ -19,7 +19,7 @@ export const signin = (req, res) => {
         });
       } else if (!user) {
         res.json({
-          error: 'Данного пользователя не существует',
+          error: 'User doesn\'t exist',
         });
       } else if (user) {
         bcrypt.compare(password, user.hash, (err, isCompare) => {
@@ -41,7 +41,7 @@ export const signin = (req, res) => {
             });
           } else {
             res.json({
-              error: 'Вы ввели неправельный пароль',
+              error: 'Wrong password',
             });
           }
         });
@@ -67,7 +67,7 @@ export const signup = (req, res) => {
         });
       } else if (user) {
         res.json({
-          error: 'Имя пользователя уже занято',
+          error: 'Username already taken',
         });
       } else if (!user) {
         const hash = bcrypt.hashSync(password, 10);

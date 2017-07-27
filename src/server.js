@@ -10,7 +10,8 @@ import { fileLimitChecker } from './middlewares/fileLimit';
 const app = express();
 const port = process.env.PORT || 3000;
 
-mongoose.connect(config.database, (err) => {
+mongoose.Promise = global.Promise; // solved problem with mongoose promise warning
+mongoose.connect(config.database, { useMongoClient: true },(err) => {
   if (err) throw err;
 });
 app.use(bodyParser.urlencoded({ limit: '2mb', extended: true }));

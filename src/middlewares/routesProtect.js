@@ -17,7 +17,7 @@ export const routesProtect = (req, res, next) => {
       });
     } else {
       res.status(403).json({
-        error: 'Токен не найден',
+        error: 'Access token not found',
       });
     }
 };

@@ -13,7 +13,7 @@ export const createPost = (req, res) => {
       });
     } else if (post) {
       res.json({
-        error: 'Запись с таким заголовком уже существует',
+        error: 'Article with this title already exist',
       });
     } else {
       const post = new PostModel({
@@ -44,7 +44,7 @@ export const getPosts = (req, res) => {
       });
     } else if (posts.length === 0) {
       res.json({
-        error: 'Записи ещё не созданы',
+        error: 'Not yet created',
       });
     } else {
       const usersIds = posts.map(post => post.author);
@@ -96,6 +96,66 @@ export const getPosts = (req, res) => {
   });
 };
 
+export const getLatestsPosts = (req, res) => {
+  PostModel.find().sort({ created_at: -1 }).limit(10).exec((err, posts) => {
+    if (err) {
+      res.status(500).json({
+        error: err,
+      });
+    } else if (posts.length === 0) {
+      res.json({
+        error: 'Not yet created',
+      });
+    } else {
+      const usersIds = posts.map(post => post.author);
+
+      UserModel.find({ _id: { $in: usersIds } }, (err, users) => {
+        if (err) {
+          res.status(500).json({
+            error: err,
+          });
+        }
+
+        let collectedPosts = [];
+
+        for (var i = 0; i < posts.length; i++) {
+          const currentPost = posts[i];
+
+          for (var j = 0; j < users.length; j++) {
+            const currentUser = users[j];
+
+            if (_.isEqual(currentPost.author, currentUser._id)) {
+              const imageData = new Buffer(readFile(currentUser.image.path)).toString('base64');
+              const contentType = !imageData ? '' : currentUser.image.contentType;
+              const image = contentType + imageData;
+
+              const comparedPost = {
+                id: currentPost._id,
+                title: currentPost.title,
+                description: currentPost.description,
+                author: {
+                  id: currentUser._id,
+                  name: currentUser.name,
+                  email: currentUser.email,
+                  image: image,
+                },
+                likes: currentPost.likes,
+                categories: currentPost.categories,
+                created_at: currentPost.created_at,
+                updated_at: currentPost.updated_at,
+              };
+              collectedPosts.push(comparedPost);
+            }
+          }
+        }
+        res.json({
+          latestPosts: collectedPosts,
+        });
+      });
+    }
+  });
+};
+
 export const getAuthorPost = (req, res) => {
   const authorId = req.params.id;
 
@@ -106,7 +166,7 @@ export const getAuthorPost = (req, res) => {
       });
     } else if (posts.length === 0) {
         res.json({
-          error: 'Вы ещё не создавали записи',
+          error: 'Not yet created',
         });
     } else {
       UserModel.findOne({ _id: authorId }, (err, author) => {
@@ -154,9 +214,9 @@ export const removePost = (req, res) => {
       });
     }
     if (post === null || post === undefined) {
-      console.log('Post with id ' + id + ' doesn\'t exist');
+      console.log('Arcticle with id ' + id + ' doesn\'t exist');
       res.json({
-        error: 'Post with id ' + id + ' doesn\'t exist',
+        error: 'Article with id ' + id + ' doesn\'t exist',
       });
     } else {
       res.status(200).json({});

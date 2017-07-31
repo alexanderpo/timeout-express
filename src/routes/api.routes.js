@@ -10,6 +10,7 @@ import {
   editPost,
   getLatestsPosts,
 } from '../controllers/Post/crud';
+import { likePost } from '../controllers/Post/like';
 
 const apiRouter = Router();
 
@@ -28,6 +29,8 @@ apiRouter.get('/posts/latest', getLatestsPosts);
 apiRouter.get('/users/:id/posts', getAuthorPost);
 
 apiRouter.post('/posts/create', createPost);
+
+apiRouter.post('/posts/:id/like', likePost);
 
 apiRouter.delete('/posts/remove/:id', removePost);
 

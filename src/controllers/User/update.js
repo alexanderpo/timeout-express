@@ -18,7 +18,7 @@ export const updateUser = (req, res) => {
         });
       } else if (anotherUser && anotherUser.id !== id) {
         res.json({
-          error: 'Имя пользователя уже занято',
+          error: 'Username already taken',
         });
       } else {
         const query = { _id: id };
